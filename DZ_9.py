@@ -66,7 +66,7 @@ def change(name):
 @input_error
 def phone(name):
     if name.isdigit():
-        raise IndexError
+        raise KeyError
     if name.isalpha():
         name = name.title()
         if name not in contacts:
