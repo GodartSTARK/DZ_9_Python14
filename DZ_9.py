@@ -1,5 +1,7 @@
 wort_list = ["hello", "add", "change", "phone", "show all", "good bye", "close", "exit"]
-contacts = {}
+contacts = {"Wowa": 777}
+a = None
+b = None
 
 
 def input_error(handler):
@@ -11,75 +13,130 @@ def input_error(handler):
             print(error_message)
             if isinstance(e, KeyError):
                 print("Contact not found.")
-                return handler(*args, **kwargs)
+                rename()
+                return enter()
             elif isinstance(e, ValueError):
                 print("Invalid input.")
-                return handler(*args, **kwargs)
+                rename()
+                return enter()
             elif isinstance(e, IndexError):
                 print("Index out of range.")
-                return handler(*args, **kwargs)
-            return handler(*args, **kwargs)
+                rename()
+                return enter()
+            rename()
+            return enter()
     return wrapper
 
 
 def hello():
     print("How can I help you?")
+    rename()
 
 
 @input_error
-def add():
-    name = input("Input name contact: ")
-    name = name.title()
-    number = input("Input number contact: ")
-    number = int(number)
+def add(name):
+    key_value = name.title()
+    if key_value.isdigit():
+        raise ValueError
+    elif key_value.isalpha():
+        raise ValueError
+    key_value = name.split()
+    name = key_value[0].title()
+    number = int(key_value[1])
     contacts[name] = number
+    rename()
 
 
 @input_error
-def change():
-    name = input("Input name for change: ")
-    name = name.title()
+def change(name):
+    key_value = name.title()
+    if key_value.isdigit():
+        raise ValueError
+    elif key_value.isalpha():
+        raise ValueError
+    key_value = key_value.split()
+    name = key_value[0].title()
+    number = int(key_value[1])
     if name not in contacts:
         raise KeyError
-    number = input("Input new number: ")
-    number = int(number)
     contacts[name] = number
+    rename()
 
 
 @input_error
-def phone():
-    name = input("Input name for print: ")
-    name = name.title()
-    if name not in contacts:
+def phone(name):
+    if name.isdigit():
+        raise IndexError
+    if name.isalpha():
+        name = name.title()
+        if name not in contacts:
+            raise KeyError
+        print(f"{name}: {contacts[name]}")
+        rename()
+    else:
         raise KeyError
-    print(f"{name}: {contacts[name]}")
 
 
 def show_all():
     for name, number in contacts.items():
         print(f"{name}: {number}")
-
+    rename()
+        
 
 def exit_program():
     print("Good bye!")
+    
 
-
-if __name__ == "__main__":
-    while True:
-        press_wort = input("Input command: ")
-        press_wort = press_wort.lower()
-        if press_wort == "hello":
+def check(wort):
+        if wort == "hello":
             hello()
-        elif press_wort == "add":
-            add()
-        elif press_wort == "change":
-            change() 
-        elif press_wort == "phone":
-            phone()
-        elif press_wort == "show all":
+        elif wort == "add":
+            add(b)
+        elif wort == "change":
+            change(b)
+        elif wort == "phone":
+            phone(b)
+        elif wort == "show all":
             show_all()
-        elif press_wort in ["good bye", "close", "exit"]:
-            exit_program()
-            break
+        elif wort in ["good bye", "close", "exit"]:
+            return exit_program()
         else:
-            print("Please choose command: " + ", ".join(wort_list))
+            print("Please choose a valid command: " + ", ".join(wort_list))
+            rename()
+        
+
+def rename():
+    global a, b
+    a = b = None
+
+
+def enter():
+    while True:
+        command = input("Input command: ").lower()
+        global a, b
+        for i in wort_list:
+            if command == i:
+                if command in ["add", "change", "phone"]:
+                    a = command
+                    print(f"Enter text for command: {command}")
+                    enter()
+                    break
+                elif command == i:
+                    a = command
+                    check(a)
+                    break 
+            if a is None:
+                i = None
+            if a is not None:
+                b = command
+                check(a)
+                break   
+        if command not in wort_list and i is None:
+            print("Please choose a valid command: " + ", ".join(wort_list))
+            enter()
+        if a in ["good bye", "close", "exit"]:
+            break
+
+    
+if __name__ == "__main__":
+    enter()
