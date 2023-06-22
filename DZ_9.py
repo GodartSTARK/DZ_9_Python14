@@ -1,5 +1,5 @@
-wort_list = ["hello", "add", "change", "phone", "show all", "good bye", "close", "exit"]
-contacts = {"Wowa": 777}
+word_list = ["hello", "add", "change", "phone", "show all", "good bye", "close", "exit"]
+contacts = {}
 a = None
 b = None
 
@@ -87,21 +87,21 @@ def exit_program():
     print("Good bye!")
     
 
-def check(wort):
-        if wort == "hello":
+def check(word):
+        if word == "hello":
             hello()
-        elif wort == "add":
+        elif word == "add":
             add(b)
-        elif wort == "change":
+        elif word == "change":
             change(b)
-        elif wort == "phone":
+        elif word == "phone":
             phone(b)
-        elif wort == "show all":
+        elif word == "show all":
             show_all()
-        elif wort in ["good bye", "close", "exit"]:
+        elif word in ["good bye", "close", "exit"]:
             return exit_program()
         else:
-            print("Please choose a valid command: " + ", ".join(wort_list))
+            print("Please choose a valid command: " + ", ".join(word_list))
             rename()
         
 
@@ -114,7 +114,7 @@ def enter():
     while True:
         command = input("Input command: ").lower()
         global a, b
-        for i in wort_list:
+        for i in word_list:
             if command == i:
                 if command in ["add", "change", "phone"]:
                     a = command
@@ -131,8 +131,8 @@ def enter():
                 b = command
                 check(a)
                 break   
-        if command not in wort_list and i is None:
-            print("Please choose a valid command: " + ", ".join(wort_list))
+        if command not in word_list and i is None:
+            print("Please choose a valid command: " + ", ".join(word_list))
             enter()
         if a in ["good bye", "close", "exit"]:
             break
